@@ -1,0 +1,302 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>PhishGuard — Phishing Awareness Dashboard</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=IBM+Plex+Mono:wght@500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+
+<div class="shell">
+  <aside class="sidebar">
+    <div class="brand">
+      <span class="brand-mark">PG</span>
+      <div>
+        <div class="brand-name">PhishGuard</div>
+        <div class="brand-sub">Security Analyzer</div>
+      </div>
+    </div>
+
+    <nav>
+      <div class="nav-group">
+        <div class="nav-label">Overview</div>
+        <div class="nav-item active" data-panel="dashboard"><span class="ic">⌂</span>Dashboard</div>
+        <div class="nav-item" data-panel="history"><span class="ic">≡</span>Activity Log</div>
+      </div>
+      <div class="nav-group">
+        <div class="nav-label">Analysis</div>
+        <div class="nav-item" data-panel="analyzer"><span class="ic">◎</span>Message Analyzer</div>
+        <div class="nav-item" data-panel="urlscanner"><span class="ic">↗</span>URL Scanner</div>
+      </div>
+      <div class="nav-group">
+        <div class="nav-label">Threat Intelligence</div>
+        <div class="nav-item" data-panel="redflags"><span class="ic">!</span>Red Flags</div>
+        <div class="nav-item" data-panel="examples"><span class="ic">▤</span>Phishing Examples</div>
+      </div>
+      <div class="nav-group">
+        <div class="nav-label">Awareness</div>
+        <div class="nav-item" data-panel="checklist"><span class="ic">✓</span>Security Checklist</div>
+        <div class="nav-item" data-panel="tips"><span class="ic">●</span>Safety Tips</div>
+        <div class="nav-item" data-panel="quiz"><span class="ic">?</span>Test Yourself</div>
+      </div>
+    </nav>
+
+    <div class="sidebar-footer">
+      <div class="system-active">
+        <div class="sa-dot"></div>
+        <div>
+          <div class="sa-title">System Active</div>
+          <div class="sa-sub">Protection engine ready</div>
+        </div>
+      </div>
+    </div>
+  </aside>
+
+  <div class="main">
+    <header class="topbar">
+      <input class="search" type="text" id="topSearch" placeholder="Search threats, keywords, or URLs…">
+      <div class="topbar-right">
+        <span class="pill pill-green">● Security Engine Online</span>
+        <button class="theme-toggle" id="themeToggle" title="Toggle dark mode">🌙</button>
+        <span class="avatar">U</span>
+      </div>
+    </header>
+
+    <div class="content">
+
+      <!-- DASHBOARD -->
+      <section class="panel active" id="panel-dashboard">
+        <div class="hero-row">
+          <div>
+            <div class="eyebrow">Security Overview</div>
+            <h1>Phishing Awareness Dashboard</h1>
+            <p class="hero-sub">Monitor suspicious communication and learn how to recognize phishing attempts.</p>
+          </div>
+          <span class="pill pill-green pill-lg">● Threat Monitoring Active</span>
+        </div>
+
+        <div class="stat-row">
+          <div class="stat-card">
+            <div class="stat-icon icon-blue">✉</div>
+            <div class="stat-label">Messages Analyzed</div>
+            <div class="stat-value" id="statMessages">0</div>
+            <div class="stat-sub">Awareness checks</div>
+          </div>
+          <div class="stat-card">
+            <div class="stat-icon icon-red">!</div>
+            <div class="stat-label">Threats Detected</div>
+            <div class="stat-value" id="statThreats">0</div>
+            <div class="stat-sub">Require attention</div>
+          </div>
+          <div class="stat-card">
+            <div class="stat-icon icon-blue">↗</div>
+            <div class="stat-label">URLs Scanned</div>
+            <div class="stat-value" id="statUrls">0</div>
+            <div class="stat-sub">Suspicious links found</div>
+          </div>
+          <div class="stat-card">
+            <div class="stat-icon icon-green">✓</div>
+            <div class="stat-label">System Status</div>
+            <div class="stat-value stat-value-sm">ACTIVE</div>
+            <div class="stat-sub">Protection engine ready</div>
+          </div>
+        </div>
+
+        <div class="two-col">
+          <div class="panel-box">
+            <h3>Threat Overview</h3>
+            <p class="box-sub">Current awareness activity</p>
+            <div class="donut-row">
+              <svg viewBox="0 0 120 120" width="150" height="150" id="donutSvg">
+                <circle cx="60" cy="60" r="50" fill="none" class="donut-track" stroke-width="16"/>
+                <g id="donutSegments" transform="rotate(-90 60 60)"></g>
+                <text x="60" y="56" text-anchor="middle" class="donut-total" id="donutTotal">0</text>
+                <text x="60" y="72" text-anchor="middle" class="donut-label">Total</text>
+              </svg>
+              <ul class="legend">
+                <li><span class="dot dot-critical"></span>Critical <b id="legCritical">0</b></li>
+                <li><span class="dot dot-high"></span>High <b id="legHigh">0</b></li>
+                <li><span class="dot dot-suspicious"></span>Suspicious <b id="legSuspicious">0</b></li>
+                <li><span class="dot dot-low"></span>Low <b id="legLow">0</b></li>
+              </ul>
+            </div>
+          </div>
+
+          <div class="panel-box">
+            <h3>Quick Analysis</h3>
+            <p class="box-sub">Start a security check</p>
+            <div class="quick-actions">
+              <div class="qa-card" data-goto="analyzer">
+                <span class="qa-ic">🔍</span>
+                <div><div class="qa-title">Analyze Message</div><div class="qa-sub">Detect phishing indicators</div></div>
+                <span class="qa-arrow">→</span>
+              </div>
+              <div class="qa-card" data-goto="urlscanner">
+                <span class="qa-ic">↗</span>
+                <div><div class="qa-title">Scan URL</div><div class="qa-sub">Inspect suspicious links</div></div>
+                <span class="qa-arrow">→</span>
+              </div>
+              <div class="qa-card" data-goto="checklist">
+                <span class="qa-ic">✓</span>
+                <div><div class="qa-title">Run Checklist</div><div class="qa-sub">Verify a message safely</div></div>
+                <span class="qa-arrow">→</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ACTIVITY LOG -->
+      <section class="panel" id="panel-history">
+        <div class="page-head"><div class="eyebrow">Overview</div><h2>Activity Log</h2></div>
+        <p class="hero-sub">Every message and URL you've analyzed this session, most recent first — pulled live from the backend.</p>
+        <div class="panel-box">
+          <div class="history-head">
+            <h4 style="margin:0;">Recent analyses</h4>
+            <span class="reset-link" id="resetHistory">Reset all data</span>
+          </div>
+          <div id="historyTableWrap">
+            <div class="result-empty">No analyses yet — try the Message Analyzer or URL Scanner.</div>
+          </div>
+        </div>
+      </section>
+
+      <!-- MESSAGE ANALYZER -->
+      <section class="panel" id="panel-analyzer">
+        <div class="page-head"><div class="eyebrow">Analysis</div><h2>Message Analyzer</h2></div>
+        <p class="hero-sub">Paste an email, SMS, or message below. Analyzed server-side by transparent rules — not AI.</p>
+        <div class="analyzer-grid">
+          <div class="panel-box">
+            <h4>Message input</h4>
+            <textarea id="msgInput" maxlength="10000" placeholder="Paste a suspicious message here…"></textarea>
+            <div class="meta-row"><span id="msgCharCount">0 characters</span><span>Maximum 10,000</span></div>
+            <div class="actions">
+              <button class="btn btn-ghost" id="msgClear">Clear</button>
+              <button class="btn btn-ghost" id="msgExample">Try example</button>
+              <button class="btn btn-primary" id="msgAnalyze">Analyze Message →</button>
+            </div>
+          </div>
+          <div class="panel-box" id="msgResultBox">
+            <h4>Analysis result</h4>
+            <div class="result-empty">Enter a message and click Analyze Message.</div>
+          </div>
+        </div>
+      </section>
+
+      <!-- URL SCANNER -->
+      <section class="panel" id="panel-urlscanner">
+        <div class="page-head"><div class="eyebrow">Analysis</div><h2>URL Scanner</h2></div>
+        <p class="hero-sub">Paste a link to check for common phishing patterns before you visit it.</p>
+        <div class="analyzer-grid">
+          <div class="panel-box">
+            <h4>URL input</h4>
+            <input type="text" id="urlInput" class="url-input" placeholder="https://example.com/login">
+            <div class="actions">
+              <button class="btn btn-ghost" id="urlClear">Clear</button>
+              <button class="btn btn-ghost" id="urlExample">Try example</button>
+              <button class="btn btn-primary" id="urlScan">Scan URL →</button>
+            </div>
+          </div>
+          <div class="panel-box" id="urlResultBox">
+            <h4>Scan result</h4>
+            <div class="result-empty">Enter a URL and click Scan URL.</div>
+          </div>
+        </div>
+      </section>
+
+      <!-- RED FLAGS -->
+      <section class="panel" id="panel-redflags">
+        <div class="page-head"><div class="eyebrow">Threat Intelligence</div><h2>Red Flags</h2></div>
+        <p class="hero-sub">Click the underlined parts of the email below.</p>
+        <div class="panel-box email-box">
+          <div class="email-toolbar">inbox — 1 unread</div>
+          <div class="field"><span class="label">From</span><span class="hotspot" data-flag="f1">IT Support Desk &lt;it-support@paypa1-secure.com&gt;</span></div>
+          <div class="field"><span class="label">To</span><span>you@yourcompany.com</span></div>
+          <div class="field"><span class="label">Subject</span><span class="hotspot" data-flag="f2">URGENT: Your account will be suspended in 24 hours</span></div>
+          <div class="email-msg">
+            <p>Dear <span class="hotspot" data-flag="f3">Valued Customer</span>,</p>
+            <p>We detected <span class="hotspot" data-flag="f4">unusual sign-in activity</span> on your account. Verify your identity <span class="hotspot" data-flag="f5">within the next 24 hours</span>.</p>
+            <p class="mono-sm">Link preview: <span class="hotspot" data-flag="f6">hxxp://paypa1-secure.verify-account.ru/login</span></p>
+          </div>
+        </div>
+        <div id="ann-f1" class="annotation">Domain spoofing: swaps a lowercase L for the digit 1, plus "-secure" tacked on to look official.</div>
+        <div id="ann-f2" class="annotation">Urgency + fear: a manufactured deadline is designed to short-circuit careful thinking.</div>
+        <div id="ann-f3" class="annotation">Generic greeting: real institutions holding your account usually know your actual name.</div>
+        <div id="ann-f4" class="annotation">Vague threat: no specifics — just enough alarm to make you click without verifying.</div>
+        <div id="ann-f5" class="annotation">Artificial time pressure, restated so it's the thing you remember, not the details.</div>
+        <div id="ann-f6" class="annotation">Mismatched destination: a ".ru" domain with the brand name tacked on.</div>
+      </section>
+
+      <!-- PHISHING EXAMPLES (tactics + case study) -->
+      <section class="panel" id="panel-examples">
+        <div class="page-head"><div class="eyebrow">Threat Intelligence</div><h2>Phishing Examples</h2></div>
+        <p class="hero-sub">How attackers manipulate, and what it looks like at scale.</p>
+        <div class="tactics">
+          <div class="tactic"><span class="tag">Pretexting</span><h4>Fabricated scenario</h4><p>Inventing a believable situation to justify asking for information they shouldn't need.</p></div>
+          <div class="tactic"><span class="tag">Baiting</span><h4>Too good to ignore</h4><p>A free gift card or shocking subject line — curiosity or greed does the work fear usually does.</p></div>
+          <div class="tactic"><span class="tag">Impersonation / BEC</span><h4>Business Email Compromise</h4><p>Posing as a CEO or vendor to request an urgent transfer, timed for when the real person is traveling.</p></div>
+          <div class="tactic"><span class="tag">Spear phishing</span><h4>Targeted vs. mass</h4><p>Personalized using real details about you or your company — far harder to catch.</p></div>
+        </div>
+        <div class="panel-box case-box">
+          <div class="mono-sm">BUSINESS EMAIL COMPROMISE · TECH SECTOR · 2013–2015</div>
+          <p>Between 2013 and 2015, a fraudster impersonated a hardware supplier that two major tech companies regularly paid, sending convincing fake invoices through correspondence that closely mimicked the real vendor. Finance staff processed the payments as routine transactions.</p>
+          <p>Over roughly two years, the scheme diverted more than $100 million before it was uncovered and prosecuted. Most funds were recovered and the perpetrator convicted, but the case remains one of the most cited examples of how patient impersonation — no malware, no hacking — can succeed purely through convincing correspondence and trust.</p>
+          <p class="mono-sm">Paraphrased summary; search "Evaldas Rimasauskas" for full reporting.</p>
+        </div>
+      </section>
+
+      <!-- SECURITY CHECKLIST -->
+      <section class="panel" id="panel-checklist">
+        <div class="page-head"><div class="eyebrow">Awareness</div><h2>Security Checklist</h2></div>
+        <p class="hero-sub">What to actually do.</p>
+        <ul class="checklist">
+          <li>Verify unexpected requests — especially for money, credentials, or access — through a separate, known channel.</li>
+          <li>Hover over links before clicking; check the domain carefully, not just the display text.</li>
+          <li>Treat urgency and fear as a signal to slow down, not speed up.</li>
+          <li>Enable multi-factor authentication everywhere it's offered.</li>
+          <li>Report suspicious emails through your organization's official channel instead of just deleting them.</li>
+          <li>Never enable macros or "edit mode" on an unexpected attachment.</li>
+        </ul>
+      </section>
+
+      <!-- SAFETY TIPS -->
+      <section class="panel" id="panel-tips">
+        <div class="page-head"><div class="eyebrow">Awareness</div><h2>Safety Tips</h2></div>
+        <p class="hero-sub">Quick reference — the short version of everything else in this dashboard.</p>
+        <ul class="checklist">
+          <li>No legitimate service will ever ask for your password or OTP by email or text.</li>
+          <li>A deadline in an email is a reason to slow down, not a reason to hurry.</li>
+          <li>When in doubt, contact the sender directly using a number or address you already know — never one from the message itself.</li>
+          <li>Bookmark your important accounts (bank, email) and use the bookmark, not a link from a message.</li>
+          <li>If a message feels slightly "off," trust that — attackers are counting on you not to look closely.</li>
+        </ul>
+      </section>
+
+      <!-- QUIZ -->
+      <section class="panel" id="panel-quiz">
+        <div class="page-head"><div class="eyebrow">Awareness</div><h2>Test Yourself</h2></div>
+        <p class="hero-sub">5 scored, scenario-based questions.</p>
+        <div class="panel-box quiz-card" id="quizCard">
+          <div class="q-progress" id="qProgress">Question 1 of 5</div>
+          <div class="q-scenario" id="qScenario"></div>
+          <div class="q-options" id="qOptions"></div>
+          <div class="q-explain" id="qExplain"></div>
+          <button class="btn btn-primary q-next" id="qNext">Next question →</button>
+          <div class="quiz-result" id="quizResult">
+            <div class="score" id="quizScore">0/5</div>
+            <div id="quizVerdict" class="box-sub"></div>
+            <button class="btn btn-ghost" id="quizRestart" style="margin-top:14px;">Retake quiz</button>
+          </div>
+        </div>
+      </section>
+
+    </div>
+  </div>
+</div>
+
+<script src="{{ url_for('static', filename='script.js') }}"></script>
+</body>
+</html>
